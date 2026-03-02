@@ -1,16 +1,41 @@
-#title, .center{
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
+/*Modificació al fons de la pàgina*/
+body {
+    background-color: #e0f7fa; 
+    font-family: Arial, sans-serif;
 }
 
-button.center{
-	width: 6rem;
-	height: 3rem;
-	margin-top: 1rem;
+#title, .center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-#title{
-	color:red;
-	text-align: center;
+/*Modificació a l'estil dels botons*/
+button.center {
+    width: 8rem;
+    height: 3rem;
+    margin-top: 1rem;
+    background-color: #0288d1;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/*Hover*/
+button.center:hover {
+    background-color: #03a9f4;
+}
+
+/*Active al clickar, fa el botó una mica més petit*/
+button.center:active {
+    transform: scale(0.95);
+}
+
+/*Modificació al títol*/
+#title {
+    color: #01579b;
+    text-align: center;
+    text-transform: uppercase;
 }
