@@ -3,9 +3,15 @@ const resources = ['../resources/cb.png', '../resources/co.png',
                 '../resources/tb.png', '../resources/to.png'];
 const back = '../resources/back.png';
 
+const StateCard = Object.freeze({
+  DISABLE: 0,
+  ENABLE: 1,
+  DONE: 2
+});
+
 var game = {
     items: [],
-    enable: [],
+    states: [],
     setValue: null,
     ready: 0,
     lastCard: null,
@@ -13,11 +19,11 @@ var game = {
     pairs: 2,
     goBack: function(idx){
         this.setValue && this.setValue[idx](back);
-        this.enable[idx] = true;
+        this.states[idx] = StateCard.ENABLE;
     },
     goFront: function(idx){
         this.setValue && this.setValue[idx](this.items[idx]);
-        this.enable[idx] = false;
+        this.states[idx] = StateCard.DISABLE;
     },
     select: function(){
         this.items = resources.slice();          
@@ -29,19 +35,20 @@ var game = {
     start: function(){
         this.items.forEach((_,indx)=>{
             setTimeout(()=>{
-                this.enable.push(false);
+                this.states.push(StateCard.DISABLE);
                 this.ready++;
                 this.goBack(indx);
             }, 1000 + 100 * indx);
         });
     },
     click: function(indx){
-        if (!this.enable[indx] || this.ready < this.items.length) return;
+        if (!this.StateCard[indx] || this.ready < this.items.length) return;
         this.goFront(indx);
         if (this.lastCard === null) this.lastCard = indx; // Primera carta clicada
         else{ // Teníem carta prèvia
             if (this.items[this.lastCard] === this.items[indx]){
                 this.pairs--;
+                this.states[this.lastCard] = this.states[indx] = StateCard.DONE;
                 if (this.pairs <= 0){
                     alert(`Has guanyat amb ${this.score} punts!!!!`);
                     window.location.assign("../");
@@ -58,6 +65,16 @@ var game = {
             }
             this.lastCard = null;
         }
+    },
+    save: function(){
+        let toSave = {
+            items: this.items,
+            states: this.states,
+            lastCard: null,
+            score: 200,
+            pairs: 2
+        };
+        // TODO: On ho guardem?
     }
 }
 
