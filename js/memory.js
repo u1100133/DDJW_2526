@@ -83,13 +83,26 @@ var game = {
         }
     },
     save: function(){
-        localStorage.save = JSON.stringify({
+        let to_save = JSON.stringify({
             items: this.items,
             states: this.states,
             lastCard: this.lastCard,
             score: this.score,
             pairs: this.pairs
         });
+        let ret = false;
+        fetch('../php/save.php', {
+            method: "POST",
+            body: to_save,
+            headers: {"Content-type": "application/json; charset=UTF-8"}
+        })
+        .then(response => ret = JSON.parse(response))
+        .catch (err => console.error(err));
+
+        if (!ret) {
+            console.warn("La partida s'ha guardat en local.");
+            localStorage.save = to_save;
+        }
         window.location.assign("../");
     }
 }
