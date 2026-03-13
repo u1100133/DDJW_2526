@@ -4,7 +4,7 @@ import {clickCard, gameItems, selectCards, startGame, initCard, saveGame} from "
 let game = $('#game');
 let canvas = game[0].getContext('2d');
 let resources = {};
-let cards = [];
+let cards = {};
 if (canvas){
     game.attr("width", 800);
     game.attr("height", 600);
@@ -13,12 +13,24 @@ if (canvas){
 }
 
 function start(){
+    const c_w = 96;
+    const c_h = 128;
     selectCards();
-    cards = [...gameItems];
+    cards = gameItems.map((c)=>{return {texture:c}});
     loadCardResource("../resources/back.png");
-    cards.forEach(card => {
-        loadCardResource(card);
-        initCard(val => card = val);
+    cards.forEach((card, indx) => {
+        loadCardResource(card.texture);
+        initCard(val => card.texture = val);
+        card.position = {
+            xMin: 2+100*indx,
+            xMax: 2+100*indx + c_w,
+            yMin: 0,
+            yMax: c_h
+        }
+        card.onClick = function(x, y){
+            return x >= this.position.xMin && x <= this.position.xMax &&
+                    y >= this.position.yMin && y <= this.position.yMax;
+        }
     });
     // TODO: Vincular events
     startGame();
