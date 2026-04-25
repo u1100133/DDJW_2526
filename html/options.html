@@ -2,19 +2,34 @@
 <html>
 	<head>
         <script src="../js/options.js" type="module"></script>
+        <link rel="stylesheet" href="../css/main.css">
 		<title> Memory - Opcions </title>
 	</head>
 	<body>
-		<h1>Opcions</h1>
-        <label for="pairs">Número de cartes</label>
-        <input type="number" id="pairs" value="2" min="2" max="6">
-        <label for="dif">Dificultat</label>
-        <select id="dif">
-            <option value="easy">Baixa</option>
-            <option value="normal" selected>Normal</option>
-            <option value="hard">Alta</option>
-        </select>
-        <button id="default">Per defecte</button>
-        <button id="apply">Aplicar</button>
+        <h1 id="title">Opcions</h1>
+
+        <div id="game" style="flex-direction: column; align-items: center;">
+            <label for="pairs">Número de grups (cartes diferents):</label>
+            <input type="number" id="pairs" value="2" min="2" max="6">
+
+            <label for="groupSize">Mida del grup:</label>
+            <select id="groupSize">
+                <option value="2" selected>Parelles</option>
+                <option value="3">Trios</option>
+                <option value="4">Quartets</option>
+            </select>
+
+            <label for="dif">Dificultat (Mode 1):</label>
+            <select id="dif">
+                <option value="easy">Fàcil</option>
+                <option value="normal" selected>Normal</option>
+                <option value="hard">Difícil</option>
+            </select>
+
+            <label for="startLevel">Nivell inicial (Mode 2):</label>
+            <input type="number" id="startLevel" value="1" min="1">
+            <button id="default" class="center">Per defecte</button>
+            <button id="apply" class="center">Aplicar</button>
+        </div>
 	</body>
 </html>
