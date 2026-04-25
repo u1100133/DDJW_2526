@@ -22,6 +22,7 @@ var game = {
     mode: "1",
     level: 1,
     alias: "Anònim",
+    saveID: null,
         
     goBack: function(idx){
         if (this.setValue && this.setValue[idx]) this.setValue[idx](back);
@@ -45,6 +46,7 @@ var game = {
             this.mode = toLoad.mode || "1";
             this.level = toLoad.level || 1;
             this.alias = toLoad.alias || "Anònim";
+            this.saveID = toLoad.saveID || null; //Recuperem el saveID si existeix
         }
         else{ //Mirem opcions de localStorage
             let options = localStorage.options ? JSON.parse(localStorage.options) : { pairs: 2, difficulty: 'normal', midaGrup: 2, startLevel: 1};
@@ -152,17 +154,36 @@ var game = {
     },
 
     save: function(){
-        let to_save = JSON.stringify({
+        let currentSave = {
+            id: this.saveID || Date.now(), //Si no te ID en generem un de nou
+            date: new Date().toLocaleString(),
+            alias: this.alias,
             items: this.items,
             states: this.states,
             cartesSeleccionades: this.cartesSeleccionades,
             score: this.score,
             pairs: this.pairs,
-            midaGrup: this.midaGrup
-        });
-        localStorage.save = to_save;
-        console.warn("Partida guardada");
-        window.location.assign("../");
+            midaGrup: this.midaGrup,
+            mode: this.mode,
+            level: this.level
+        };
+        //historial de partides
+        let allSaves = localStorage.saves ? JSON.parse(localStorage.saves) : [];
+        if (this.saveID) {
+            //si ja teniem ID busquem la partida i la sobreescribim
+            let index = allSaves.findIndex(s => s.id === this.saveID);
+            if (index !== -1) {
+                allSaves[index] = currentSave;
+            } else {
+                //si es nova l'afegim
+                allSaves.push(currentSave);
+                this.saveID = currentSave.id;
+            }
+
+            localStorage.saves = JSON.stringify(allSaves);
+            alert("Partida guardada correctament!");
+            window.location.assign("../");
+        }
     },
 
     saveScore: function(){

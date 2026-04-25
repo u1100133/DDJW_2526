@@ -34,13 +34,30 @@ addEventListener('load', function() {
     });
 
     $('#saves').on('click', function(){
-        let to_load = localStorage.save;
-        if (!to_load) {
-            alert("No hi ha cap partida a carregar");
-            return;
+        let allSaves = localStorage.saves ? JSON.parse(localStorage.saves) : [];
+        let container = $('#saveListContainer');
+        let list = $('#saveList');
+        list.empty(); //netejem la llista anterior
+
+        if (allSaves.length === 0) {
+            list.append("<p>No hi ha partides guardades.</p>");
+        } else {
+            allSaves.forEach((s) => {
+                let btn = $(`<button class="center" style="width: 100%; height: auto; padding: 10px; margin-bottom: 5px;">
+                    ${s.alias} - Mode ${s.mode} (Punts: ${s.score})<br><small>${s.date}</small></button>`); 
+
+                btn.on('click', function() {
+                    sessionStorage.load = JSON.stringify(s); 
+                    window.location.assign("./html/game.html");
+                });
+                list.append(btn);
+            });
         }
-        sessionStorage.load = to_load;
-        window.location.assign("./html/game.html");
+        container.show();
+    });
+
+    $('#closeSaves').on('click', function(){
+        $('#saveListContainer').hide();
     });
 
     $('#exit').on('click', function(){
