@@ -2,11 +2,20 @@
 <html>
 	<head>
         <script src="../js/canvasgame.js" type="module"></script>
+		<link rel="stylesheet" href="../styles/main.css">
 		<title> Memory - Pantalla </title>
 	</head>
-	<body>
-		<h1>Partida</h1>
-        <canvas id="game"> </canvas>
+	<body style="display: flex; flex-direction: column; align-items: center;">
+		<h1 id="title">Partida en curs</h1>
+
+		<div style="Background: white; padding: 10px; border-radius: 12px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);">
+        	<canvas id="game"> </canvas>
+		</div>
+
+		<div style="margin-top: 25px; text-align: center; color: #01579b; font-family: sans-serif; line-height: 1.6;">
+			<p style="font-weight: bold; text-transform: uppercase; font-size: 0.9rem;">Controls del Teclat</p>
+			<p>Fletxer: Moure's | Enter: Girar carta | Esc: Guardar i sortir</p>
+		</div>	
 	</body>
 </html>
 

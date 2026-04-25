@@ -48,8 +48,8 @@ function start(){
     // Vincular events
     game.on('click', function(e){
         e_click.click = true;
-        e_click.x = e.pageX - this.offsetLeft;
-        e_click.y = e.pageY - this.offsetTop;
+        e_click.x = e.offsetX;
+        e_click.y = e.offsetY;
     });
     $(document).keydown(e=>key = e.key);
     startGame();
@@ -76,7 +76,7 @@ function draw(){
     canvas.fillRect(0, 0, 800, 600);
     cards.forEach((card, indx) => {
         let res = resources[card.texture];
-        if (res.ready && res){
+        if (res && res.ready){
             if (idxSel === indx) {
                 canvas.shadowColor = '#01579b'; //efecte de seleccionat
                 canvas.shadowBlur = 15;

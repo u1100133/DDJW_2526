@@ -73,26 +73,21 @@ var game = {
                 this.items.push(res);
             }
         });
-        shuffe(this.items);                      
+        shuffle(this.items);                      
         this.states = new Array(this.items.length).fill(StateCard.ENABLE);
         this.pairs = numGrups;
         this.ready = 0;
     },
 
     start: function(){
-        this.items.forEach((_,indx)=>{
-            if (this.states[indx] === StateCard.ENABLE){
+        this.ready = 0;
+        this.items.forEach((_, indx) => {
+            this.goFront(indx); //Mostrem la cara i les bloquejem
+            setTimeout(() => { //Passa un temps esglaonat, giren les cartes i les habilitem
+                this.goBack(indx);
                 this.ready++;
-                this.goFront(indx);
-            }
-            else{ 
-                this.goFront(indx); //Mostrem totes les cartes un moment al principi
-                setTimeout(()=>{
-                    this.ready++;
-                    this.goBack(indx);
-                }, 1000 + 100 * indx);
-            }
-        });
+            }, 1000 + 100 * indx);
+        }); //Mostrem les cartes una a una amb un petit delay
     },
 
     click: function(indx){
@@ -203,7 +198,7 @@ var game = {
     }
 }
 
-function shuffe(arr){
+function shuffle(arr){
     arr.sort(function () {return Math.random() - 0.5});
 }
 
