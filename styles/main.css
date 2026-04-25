@@ -46,6 +46,6 @@ button.center:active {
 	flex-wrap: wrap;
 	justify-content: center;
 	margin: 0 auto;
-	max-width: 800px
+	max-width: 800px;
 	gap: 10px;
 }
