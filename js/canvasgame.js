@@ -22,14 +22,23 @@ function start(){
     selectCards();
     cards = gameItems.map((c)=>{return {texture:c}});
     loadCardResource("../resources/back.png");
+
+    //Fem una graella que s'adapta al numero de cartes
+    let cols = Math.floor(750 / (c_w + 10)); //maxim de columnes q cabran
+    let offsetX = (800 - (Math.min(cards.length, cols) * (c_w + 10))) / 2; //centrar les cartes
+    let offsetY = 50;
+
     cards.forEach((card, indx) => {
         loadCardResource(card.texture);
         initCard(val => card.texture = val);
+        let col = indx % cols;
+        let row = Math.floor(indx / cols);
+
         card.position = {
-            xMin: 2+100*indx,
-            xMax: 2+100*indx + c_w,
-            yMin: 0,
-            yMax: c_h
+            xMin: offsetX + col * (c_w + 10),
+            xMax: offsetX + col * (c_w + 10) + c_w,
+            yMin: offsetY + row * (c_h + 10),
+            yMax: offsetY + row * (c_h + 10) + c_h
         }
         card.onClick = function(x, y){
             return x >= this.position.xMin && x <= this.position.xMax &&
@@ -63,16 +72,19 @@ function loadCardResource(src){
 }
 
 function draw(){
-    canvas.reset();
+    canvas.fillStyle = "#ffffff"; 
+    canvas.fillRect(0, 0, 800, 600);
     cards.forEach((card, indx) => {
         let res = resources[card.texture];
-        if (res.ready){
-            if (idxSel === indx)
-                canvas.drawImage(res.image, card.position.xMin, 
-                                card.position.yMin, c_w + 4, c_h + 4);
-            else
-                canvas.drawImage(res.image, card.position.xMin, 
-                                    card.position.yMin, c_w, c_h);
+        if (res.ready && res){
+            if (idxSel === indx) {
+                canvas.shadowColor = '#01579b'; //efecte de seleccionat
+                canvas.shadowBlur = 15;
+                canvas.drawImage(res.image, card.position.xMin - 2, card.position.yMin - 2, c_w + 4, c_h + 4);
+                canvas.shadowBlur = 0; //reset
+            } else {
+                canvas.drawImage(res.image, card.position.xMin, card.position.yMin, c_w, c_h);
+            }
         }
     });
 }
@@ -86,7 +98,7 @@ function checkInput(){
         });
     }
     if (key){
-        let prevIndx = idxSel;
+        let cols = Math.floor(750 / (c_w + 10));
         switch(key){
             case "Escape":
                 saveGame();
@@ -97,17 +109,17 @@ function checkInput(){
             case "ArrowLeft":
                 idxSel = (idxSel - 1 + cards.length)%cards.length;
                 break;
+            case "ArrowDown":
+                if (idxSel + cols < cards.length) idxSel += cols;
+                break;
+            case "ArrowUp":
+                if (idxSel - cols >= 0) idxSel -= cols;
+                break;
             case "Enter":
                 if (idxSel >= 0) clickCard(idxSel);
                 break;
             default:
                 console.warn("Tecla "+key+" no reconeguda.");
-        }
-        if (idxSel != prevIndx){
-            if (prevIndx >= 0) {
-                cards[prevIndx].position.xMin += 2;
-            }
-            cards[idxSel].position.xMin -= 2;
         }
     }
     e_click.click = key = false;

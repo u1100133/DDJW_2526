@@ -26,7 +26,7 @@ addEventListener('load', function() {
         sessionStorage.mode = mode;
         sessionStorage.removeItem("load"); //Nova partida
 
-        window.location.assign("./html/game.html");
+        window.location.assign("./html/canvasgame.html");
     });
 
     $('#options').on('click', function(){
@@ -48,7 +48,7 @@ addEventListener('load', function() {
 
                 btn.on('click', function() {
                     sessionStorage.load = JSON.stringify(s); 
-                    window.location.assign("./html/game.html");
+                    window.location.assign("./html/canvasgame.html");
                 });
                 list.append(btn);
             });
