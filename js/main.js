@@ -60,6 +60,28 @@ addEventListener('load', function() {
         $('#saveListContainer').hide();
     });
 
+    $('#ranking').on('click', function(){
+        let scores = localStorage.ranking ? JSON.parse(localStorage.ranking) : [];
+        let container = $('#rankingContainer');
+        let content = $('#rankingContent');
+        content.empty();
+        
+        if (scores.length === 0) {
+            content.append("<p>No hi ha puntuacions registrades.</p>");
+        } else {
+            let list = $("<ol style='text-align: left, padding-left: 40px;'></ol>");
+            scores.forEach(s => {
+                list.append(`<li><strong>${s.alias}</strong>: ${s.score} punts (Mode ${s.mode})</li>`);
+            });
+            content.append(list);
+        }
+        container.show();
+    });
+
+    $('#closeRanking').on('click', function(){
+        $('#rankingContainer').hide();
+    });
+
     $('#exit').on('click', function(){
         if(confirm("Sortir del joc?")) {
             window.close();
