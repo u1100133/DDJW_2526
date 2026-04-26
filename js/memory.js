@@ -164,21 +164,17 @@ var game = {
         };
         //historial de partides
         let allSaves = localStorage.saves ? JSON.parse(localStorage.saves) : [];
-        if (this.saveID) {
-            //si ja teniem ID busquem la partida i la sobreescribim
-            let index = allSaves.findIndex(s => s.id === this.saveID);
-            if (index !== -1) {
-                allSaves[index] = currentSave;
-            } else {
-                //si es nova l'afegim
-                allSaves.push(currentSave);
-                this.saveID = currentSave.id;
-            }
-
-            localStorage.saves = JSON.stringify(allSaves);
-            alert("Partida guardada correctament!");
-            window.location.assign("../");
+        let index = allSaves.findIndex(s => s.id === currentSave.id);
+        if (index !== -1){
+            allSaves[index] = currentSave; //Actualitzem partida existent
+        } else {
+            allSaves.push(currentSave); //Afegim nova partida
+            this.saveID = currentSave.id;
         }
+        
+        localStorage.saves = JSON.stringify(allSaves);
+        alert("Partida guardada correctament!");
+        window.location.assign("../");
     },
 
     saveScore: function(){
