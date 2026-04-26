@@ -17,7 +17,7 @@ var game = {
     cartesSeleccionades: [], //Array que guardara els index de les cartes girades
     score: 200,
     pairs: 2,
-    midaGrup: 2, //Parelles, trios o quartets
+    groupSize: 2, //Parelles, trios o quartets
     lock: false, //Per bloquejar el clic mentre es mostren cartes errònies
     mode: "1",
     level: 1,
@@ -42,17 +42,17 @@ var game = {
             this.cartesSeleccionades = toLoad.cartesSeleccionades || [];
             this.score = toLoad.score;
             this.pairs = toLoad.pairs;
-            this.midaGrup = toLoad.midaGrup || 2;
+            this.groupSize = toLoad.groupSize || 2;
             this.mode = toLoad.mode || "1";
             this.level = toLoad.level || 1;
             this.alias = toLoad.alias || "Anònim";
             this.saveID = toLoad.saveID || null; //Recuperem el saveID si existeix
         }
         else{ //Mirem opcions de localStorage
-            let options = localStorage.options ? JSON.parse(localStorage.options) : { pairs: 2, difficulty: 'normal', midaGrup: 2, startLevel: 1};
+            let options = localStorage.options ? JSON.parse(localStorage.options) : { pairs: 2, difficulty: 'normal', groupSize: 2, startLevel: 1};
             this.alias = sessionStorage.alias || "Anònim";
             this.mode = sessionStorage.mode || "1";
-            this.midaGrup = parseInt(options.midaGrup) || 2;
+            this.groupSize = parseInt(options.groupSize) || 2;
             this.level = (this.mode === "2") ? parseInt(options.startLevel) : 1;
 
             //En el mode 2 el número de grups inicial depèn del nivell
@@ -68,8 +68,8 @@ var game = {
         let pool = resources.slice();
         shuffle(pool);
         let selectedResources = pool.slice(0, numGrups); //Agafem tants recursos com grups necessitem
-        selectedResources.forEach(res => { //Afegim tantes copies com digui midaGrup per cada recurs
-            for (let i = 0; i < this.midaGrup; i++) {
+        selectedResources.forEach(res => { //Afegim tantes copies com digui groupSize per cada recurs
+            for (let i = 0; i < this.groupSize; i++) {
                 this.items.push(res);
             }
         });
@@ -95,7 +95,7 @@ var game = {
         this.goFront(indx);
         this.cartesSeleccionades.push(indx);
 
-        if (this.cartesSeleccionades.length === this.midaGrup){
+        if (this.cartesSeleccionades.length === this.groupSize){
             this.checkMatch();
         }
     },
@@ -158,7 +158,7 @@ var game = {
             cartesSeleccionades: this.cartesSeleccionades,
             score: this.score,
             pairs: this.pairs,
-            midaGrup: this.midaGrup,
+            groupSize: this.groupSize,
             mode: this.mode,
             level: this.level
         };
@@ -188,7 +188,7 @@ var game = {
     saveToSession: function(){
         sessionStorage.load = JSON.stringify({
             items: this.items, states: this.states, score: this.score,
-            pairs: this.pairs, midaGrup: this.midaGrup, mode: this.mode, 
+            pairs: this.pairs, groupSize: this.groupSize, mode: this.mode, 
             level: this.level, alias: this.alias
         });
     }
