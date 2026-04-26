@@ -48,7 +48,7 @@ var game = {
             this.mode = toLoad.mode || "1";
             this.level = toLoad.level || 1;
             this.alias = toLoad.alias || "Anònim";
-            this.saveID = toLoad.saveID || null; //Recuperem el saveID si existeix
+            this.saveID = toLoad.id || toLoad.saveID || null; //Recuperem el saveID si existeix
         }
         else{ //Mirem opcions de localStorage
             let options = localStorage.options ? JSON.parse(localStorage.options) : { pairs: 2, difficulty: 'normal', groupSize: 2, startLevel: 1};
@@ -62,6 +62,7 @@ var game = {
             
             this.generateBoard(numGrups);
             this.score = 200;
+            this.saveID = null; //Assegurem que és una partida nova
         }
     },
 
@@ -119,8 +120,9 @@ var game = {
                     alert(`Nivell ${this.level} superat!`);
                     this.level++;
                     this.generateBoard(this.level + 1); 
-                    location.reload(); //reinici visual 
                     this.saveToSession(); //Guardem l'estat actual al sessionStorage per no perdre el score
+                    location.reload(); //reinici visual 
+                    
                 }
             }
         } else {
@@ -147,6 +149,13 @@ var game = {
         } else {
             alert("Has perdut!");  
         }
+
+        if (this.saveID) {
+            let allSaves = localStorage.saves ? JSON.parse(localStorage.saves) : [];
+            let novesPartides = allSaves.filter(s => s.id !== this.saveID); // Eliminem la partida actual
+            localStorage.saves = JSON.stringify(novesPartides);
+        }
+
         window.location.assign("../");
     },
 
@@ -191,7 +200,7 @@ var game = {
         sessionStorage.load = JSON.stringify({
             items: this.items, states: this.states, score: this.score,
             pairs: this.pairs, groupSize: this.groupSize, mode: this.mode, 
-            level: this.level, alias: this.alias
+            level: this.level, alias: this.alias, id: this.saveID
         });
     }
 }
