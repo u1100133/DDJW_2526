@@ -21,7 +21,7 @@ if (canvas){
 function start(){
     selectCards();
     cards = gameItems.map((c)=>{return {texture:c}});
-    loadCardResource("../resources/back.png");
+    loadCardResource("../resources/backSVG.svg");
 
     //Fem una graella que s'adapta al numero de cartes
     let cols = Math.floor(750 / (c_w + 10)); //maxim de columnes q cabran
